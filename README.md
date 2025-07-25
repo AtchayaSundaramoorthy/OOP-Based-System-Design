@@ -178,7 +178,8 @@ class Grade {
 }
 ```
 ## UML Diagram
-![Uploading online course system design.jpg…]()
+
+![online course system design](https://github.com/user-attachments/assets/6a688684-05e5-40a8-98b1-6e16221df812)
 
 ## Conclusion
 
