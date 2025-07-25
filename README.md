@@ -45,7 +45,7 @@ Design and simulate a course management system using core **Object-Oriented Prog
 
 ---
 
-## 💡 OOP Concepts Used
+## OOP Concepts Used
 
 | Concept        | Applied In                                                   |
 |----------------|---------------------------------------------------------------|
@@ -56,17 +56,131 @@ Design and simulate a course management system using core **Object-Oriented Prog
 
 ---
 
-## 🔍 Sample Usage
+## 🔍 Code
 
-```javascript
-const alice = new Instructor(1, "Alice", "alice@mail.com");
-const courseJS = alice.createCourse(101, "JavaScript Basics");
+```
+class User {
+  constructor(id, name, email) {
+    this._id = id;
+    this._name = name;
+    this._email = email;
+  }
 
-const bob = new Student(2, "Bob", "bob@mail.com");
-bob.enroll(courseJS);
+  login() {
+    console.log(`${this._name} logged in.`);
+  }
 
-const hw1 = new Assignment(1, "JS Homework 1", courseJS);
-courseJS.addAssignment(hw1);
+  logout() {
+    console.log(`${this._name} logged out.`);
+  }
 
-bob.uploadAssignment(hw1, "bob_hw1.pdf");
-alice.gradeAssignment(hw1, bob, 90);
+  getRole() {
+    return "User";
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  set name(newName) {
+    this._name = newName;
+  }
+}
+class Student extends User {
+  constructor(id, name, email) {
+    super(id, name, email);
+    this.enrolledCourses = [];
+    this.grades = [];
+  }
+
+  enroll(course) {
+    course.addStudent(this);
+    this.enrolledCourses.push(course);
+  }
+
+  uploadAssignment(assignment, file) {
+    assignment.submit(this, file);
+  }
+
+  getRole() {
+    return "Student";
+  }
+}
+
+class Instructor extends User {
+  constructor(id, name, email) {
+    super(id, name, email);
+    this.createdCourses = [];
+  }
+
+  createCourse(id, title) {
+    const course = new Course(id, title, this);
+    this.createdCourses.push(course);
+    return course;
+  }
+
+  gradeAssignment(assignment, student, score) {
+    const grade = new Grade(assignment, student, score);
+    student.grades.push(grade);
+    return grade;
+  }
+
+  getRole() {
+    return "Instructor";
+  }
+}
+
+class Course {
+  constructor(id, title, instructor) {
+    this.id = id;
+    this.title = title;
+    this.instructor = instructor;
+    this.students = [];
+    this.assignments = [];
+  }
+
+  addStudent(student) {
+    this.students.push(student);
+  }
+
+  addAssignment(assignment) {
+    this.assignments.push(assignment);
+  }
+}
+
+class Assignment {
+  constructor(id, title, course) {
+    this.id = id;
+    this.title = title;
+    this.course = course;
+    this.submissions = new Map(); 
+  }
+
+  submit(student, file) {
+    this.submissions.set(student, file);
+  }
+
+  getSubmission(student) {
+    return this.submissions.get(student);
+  }
+}
+
+class Grade {
+  constructor(assignment, student, score) {
+    this.assignment = assignment;
+    this.student = student;
+    this.score = score;
+  }
+
+  getGrade() {
+    return this.score;
+  }
+}
+```
+## UML Diagram
+![Uploading online course system design.jpg…]()
+
+## Conclusion
+
+This project helped me understand and apply OOP concepts to build a basic course management system with real-world features like enrollment, assignment submission, and grading
+
